@@ -156,12 +156,32 @@ def calculate_reliability(fungsi_str, lambdas, t_values):
             })
         h_str = f_str = "numerical"
 
+    # === MTBF = integral R(t) from 0 to infinity ===
+    mtbf_expression = None
+    mtbf_value = None
+    try:
+        t_sym = sp.symbols('t', positive=True)
+        lam_syms = {name: sp.symbols(name, positive=True) for name in lambdas.keys()}
+        locals_mtbf = {**lam_syms, 'exp': sp.exp}
+        expr_sym = sp.sympify(fungsi_str, locals=locals_mtbf)
+        mtbf_expr = sp.integrate(expr_sym, (t_sym, 0, sp.oo))
+        mtbf_expression = str(mtbf_expr)
+        mtbf_num = mtbf_expr.subs(lambdas)
+        ev = mtbf_num.evalf()
+        if ev.is_real and ev.is_finite:
+            mtbf_value = float(ev)
+        print(f"[MTBF] expression={mtbf_expression}, value={mtbf_value}")
+    except Exception as e_mtbf:
+        print(f"[MTBF] Failed: {e_mtbf}")
+
     return {
         "R": R_str,
         "h": h_str,
         "f": f_str,
         "data": pd.DataFrame(rows).to_dict(orient="records"),
-        "method": method
+        "method": method,
+        "mtbf_expression": mtbf_expression,
+        "mtbf_value": mtbf_value,
     }
 
 
