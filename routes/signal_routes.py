@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 import pandas as pd
-from signal_processing import compute_features, compute_fft_plot, compute_time_plot
+from helpers.signal_processing import compute_features, compute_fft_plot, compute_time_plot
 
 signal_bp = Blueprint('signal', __name__)
 

@@ -2,8 +2,8 @@ from flask import Blueprint, request, jsonify, send_file
 import io
 import os
 from werkzeug.utils import secure_filename
-from crypto_helper import hash_file_data, generate_rsa_keys, sign_data, verify_signature
-from pdf_helper import append_signature_page, get_original_hash_from_pdf
+from helpers.crypto_helper import hash_file_data, generate_rsa_keys, sign_data, verify_signature
+from helpers.pdf_helper import append_signature_page, get_original_hash_from_pdf
 
 crypto_bp = Blueprint('crypto', __name__)
 
